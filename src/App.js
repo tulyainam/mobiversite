@@ -14,16 +14,16 @@ const App = () => {
     clickHandle('en')
   }, []);
 
-  const handleClick=(e)=>{
+const handleClick=(e)=>{
+  setIsActive({
+    id: e
+  });
+  if(isActive.id == e){
     setIsActive({
-      id: e
+      id: ''
     });
-    if(isActive.id == e){
-      setIsActive({
-        id: ''
-      });
-    }
   }
+}
 
   const { i18n, t } = useTranslation();
 
@@ -252,7 +252,7 @@ const App = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => clickHandle("en")}>{t('English')}</Dropdown.Item>
+              <Dropdown.Item onClick={() => clickHandle("en")}>English</Dropdown.Item>
               <Dropdown.Item onClick={() => clickHandle("tr")}>Turkish</Dropdown.Item>
               <Dropdown.Item onClick={() => clickHandle("gr")}>German</Dropdown.Item>
             </Dropdown.Menu>
