@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { dataJson } from "./data";
 import { useTranslation } from "react-i18next";
+import Dropdown from 'react-bootstrap/Dropdown';
+
 
 const App = () => {
-  const [show, setShow] = useState([{name: '', image:'', desc:''}]);
+  const [show, setShow] = useState([{name: '', image:'', desc:'', isAlert: false, isThere: false}]);
   const [isActive, setIsActive] = useState(false);
+  const [lanuages, setLanguage] = useState('')
 
   useEffect(() => {
     clickHandle('en')
@@ -15,6 +18,7 @@ const App = () => {
 
   const clickHandle = (lang) => {
     const defaultLang = 'en';
+    setLanguage(lang)
     i18n.changeLanguage(lang)
     setShow([])
     let size = [];
@@ -28,7 +32,6 @@ const App = () => {
     const size67 = dataJson.find((e) => e.name == "IPHONE_67" && e.lang == lang);
 
     if(size67){
-      console.log('47 giriş')
       size.push({name: size67.name, image:  size67.image, isThere: true, isAlert: false, desc: ''});
     }else if(!size67 && lang != defaultLang){
       const size65 = dataJson.find((e) => e.name == "IPHONE_65" && e.lang == lang);
@@ -37,25 +40,23 @@ const App = () => {
       }else{
         const size67En = dataJson.find((e) => e.name == "IPHONE_67" && e.lang == defaultLang);
         if(size67En){
-          size.push({name: size67En.name, image: size67En.image, isThere: true, isAlert: true, desc: 'ingilizce 47'});
+          size.push({name: size67En.name, image: size67En.image, isThere: true, isAlert: false, desc: ''});
         }else{
           const size65En = dataJson.find((e) => e.name == "IPHONE_65" && e.lang == defaultLang);
           if(size65En){
-            size.push({name: size65En.name, image: size65En.image, isThere: true, isAlert: true, desc: 'ingilizce 55'});
+            size.push({name: size65En.name, image: size65En.image, isThere: true, isAlert: true, desc: 'Using English 6.5 Display'});
           }else{
             size.push({name: '', image: '', isThere: false, isAlert: true, desc: 'No screenshot'});
           }
         }
       }
-      console.log('47eng')
     }else if(!size67 && lang == defaultLang){
       const size65 = dataJson.find((e) => e.name == "IPHONE_65" && e.lang == lang);
       if(size65){
-        size.push({name: size65.name, image: size65.image, isThere: true, isAlert: true, desc: 'ingilizce 55'});
+        size.push({name: size65.name, image: size65.image, isThere: true, isAlert: true, desc: 'Using 6.5 Display'});
       }else{
         size.push({name: '', image: '', isThere: false, isAlert: true, desc: 'No screenshot'});
       }
-      console.log('buraya geldi mi47???')
     }
 
     if(size65){
@@ -245,17 +246,25 @@ const App = () => {
     <div className="App">
       <div className="container">
         <div className="row">
-          <div className="col-lg-12">
-            <button onClick={() => clickHandle("en")}>English</button>
-            <button onClick={() => clickHandle("tr")}>Turkish</button>
-            <button onClick={() => clickHandle("gr")}>German</button>
+          <div>
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              {lanuages == 'en' ? 'English': lanuages == 'tr' ? 'Turkish': 'German'}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => clickHandle("en")}>English</Dropdown.Item>
+              <Dropdown.Item onClick={() => clickHandle("tr")}>Turkish</Dropdown.Item>
+              <Dropdown.Item onClick={() => clickHandle("gr")}>German</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           </div>
           <div className="col-lg-12">
            {show.length > 1 ? 
            <div>
               <div className="size-box-container">
-                <div className="button" onClick={()=> setIsActive(!isActive)}>
-                  <h3>iPhone 6.7 Display</h3>
+                <div className="button" id="divOne" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 6.7 Display</h5>
                   {isActive == false ? (
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
                   ) : (
@@ -264,53 +273,112 @@ const App = () => {
                 </div>
                 {isActive == true ? (
                   <div className="size-box-content">
-                    <img src={show[0].image} alt="" className="size-img"/>
-                    <h3>{show[0].name}</h3>
-                    <p>{show[0].desc}</p>
+                    {show[0].image != '' ? <img src={show[0].image} alt="" className="size-img"/>: null}
+                    {show[0].desc != '' ? <p>{show[0].desc}</p> : null}
                   </div>
                 ):null}
               </div>
               <div className="size-box-container">
-                <h3>iPhone 6.5 Display</h3>
-                <div className="size-box-content">
-                  <h3>{show[1].name}</h3>
+                <div className="button" id="divTwo" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 6.5 Display</h5>
+                  {isActive == false ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                  )}
+                </div>
+                {isActive == true ? (
+                  <div className="size-box-content">
+                  <h5>{show[1].name}</h5>
                   <p>{show[1].desc}</p>
                 </div>
+                ): null}
+                
               </div>
               <div className="size-box-container">
-                <h3>iPhone 6.1 Display</h3>
-                <div className="size-box-content">
-                  <h3>{show[2].name}</h3>
+              <div className="button" id="divThree" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 6.1 Display</h5>
+                  {isActive == false ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                  )}
+                </div>
+                {isActive == true ? (
+                  <div className="size-box-content">
+                  <h5>{show[2].name}</h5>
                   <p>{show[2].desc}</p>
                 </div>
+                ): null}
+                
               </div>
               <div className="size-box-container">
-                <h3>iPhone 5.8 Display</h3>
-                <div className="size-box-content">
-                  <h3>{show[3].name}</h3>
+                <div className="button" id="divFour" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 5.8 Display</h5>
+                  {isActive == false ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                  )}
+                </div>
+                {isActive == true ? (
+                  <div className="size-box-content">
+                    {show[3].name != "" ? <h5>{show[3].name}</h5> : null}
                   <p>{show[3].desc}</p>
                 </div>
+                ): null}
+                
               </div>
               <div className="size-box-container">
-                <h3>iPhone 5.5 Display</h3>
-                <div className="size-box-content">
-                  <h3>{show[4].name}</h3>
+              <div className="button" id="divFive" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 5.5 Display</h5>
+                  {isActive == false ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                  )}
+                </div>
+                {isActive == true ? (
+                  <div className="size-box-content">
+                  {show[4].name != "" ? <h5>{show[4].name}</h5> : null}
                   <p>{show[4].desc}</p>
                 </div>
+                ): null}
+                
               </div>
               <div className="size-box-container">
-                <h3>iPhone 4.7 Display</h3>
-                <div className="size-box-content">
-                  <h3>{show[5].name}</h3>
+              <div className="button" id="divSix" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 4.7 Display</h5>
+                  {isActive == false ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                  )}
+                </div>
+                {isActive == true ? (
+                  <div className="size-box-content">
+                  {show[5].name != "" ? <h5>{show[5].name}</h5> : null}
                   <p>{show[5].desc}</p>
                 </div>
+                ): null}
+                
               </div>
               <div className="size-box-container">
-                <h3>iPhone 4.0 Display</h3>
-                <div className="size-box-content">
-                  <h3>{show[6].name}</h3>
+              <div className="button" id="divSeven" onClick={()=> setIsActive(!isActive)}>
+                  <h5>iPhone 4.0 Display</h5>
+                  {isActive == false ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#000"><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                  )}
+                </div>
+                {isActive == true ? (
+                  <div className="size-box-content">
+                  {show[6].name != "" ? <h5>{show[6].name}</h5> : null}
                   <p>{show[6].desc}</p>
                 </div>
+                ): null}
+                
               </div>
            </div>: null}
           </div>
