@@ -16,9 +16,9 @@
 }
 
 .size-box-content{
-  background-color: #fff;
+  background-color: #f2f2f2;
   border-radius: 15px;
-  padding: 5px;
+  padding: 1rem;
 }
 
 .button{
@@ -33,13 +33,13 @@ h5{
 }
 
 .size-img{
-  width: 5rem;
-  height: 5vh;
+  width: 10rem;
+  height: auto;
   border-radius: 5px;
 }
 
 p {
-  margin-bottom: 0 !important;
+  margin-bottom: 10px !important;
 }
 
 .dropdown{
