@@ -252,7 +252,7 @@ const handleClick=(e)=>{
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => clickHandle("en")}>English</Dropdown.Item>
+              <Dropdown.Item onClick={() => clickHandle("en")}>{t('English')}</Dropdown.Item>
               <Dropdown.Item onClick={() => clickHandle("tr")}>Turkish</Dropdown.Item>
               <Dropdown.Item onClick={() => clickHandle("gr")}>German</Dropdown.Item>
             </Dropdown.Menu>

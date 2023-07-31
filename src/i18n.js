@@ -24,10 +24,13 @@ const resouces= {
 
 i18n.use(initReactI18next).init({
         lng: "en",
-        fallbackLng: "en",
+        debug: true,
+        fallbackLng: "en", // use de if selected language is not available
         interpolation: {
-            escapeValue: false,
+        escapeValue: false
         },
+        ns: "translation", // namespaces help to divide huge translations into multiple small files.
+        defaultNS: "translation",
         resouces: resouces,
     });
 
